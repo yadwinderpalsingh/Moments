@@ -86,7 +86,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         // Modify the cell
         let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
-        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFill , options: nil, resultHandler: {(result:UIImage!, info: NSDictionary!)in
+        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFill , options: nil, resultHandler: {(result:UIImage?, info: [NSObject : AnyObject]?)in
                 cell.setThumbnailMoment(result!)
         })
         
