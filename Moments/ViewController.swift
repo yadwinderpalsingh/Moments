@@ -16,7 +16,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     var albumFound: Bool = false
     var assetCollection: PHAssetCollection!
-    var photosAsset: PHFetchOptions!
+    var photosAsset: PHFetchResult!
     
     // Actions & Outlets
     
@@ -78,15 +78,17 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // UICollectionViewDataSource Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        return self.photosAsset.accessibilityElementCount()
+        return self.photosAsset.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
-        let cell: UICollectionViewCell = momentCollection.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as UICollectionViewCell
+        let cell: MomentThumbnail = momentCollection.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! MomentThumbnail
         
         // Modify the cell
-        
-        cell.backgroundColor = UIColor.redColor()
+        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
+        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFill , options: nil, resultHandler: {(result:UIImage!, info: NSDictionary!)in
+                cell.setThumbnailMoment(result!)
+        })
         
         return cell
     }

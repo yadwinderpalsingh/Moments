@@ -16,6 +16,7 @@
 		FE81B83A1D600B9C00E1CA30 /* MomentsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE81B8391D600B9C00E1CA30 /* MomentsUITests.swift */; };
 		FE81B8481D6014EC00E1CA30 /* MomentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE81B8471D6014EC00E1CA30 /* MomentViewController.swift */; };
 		FE81B84A1D601CC100E1CA30 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE81B8491D601CC100E1CA30 /* Photos.framework */; };
+		FE81B84C1D60D01500E1CA30 /* MomentThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE81B84B1D60D01500E1CA30 /* MomentThumbnail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		FE81B83B1D600B9C00E1CA30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE81B8471D6014EC00E1CA30 /* MomentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentViewController.swift; sourceTree = "<group>"; };
 		FE81B8491D601CC100E1CA30 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		FE81B84B1D60D01500E1CA30 /* MomentThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentThumbnail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			children = (
 				FE81B8191D600B9B00E1CA30 /* AppDelegate.swift */,
 				FE81B81B1D600B9B00E1CA30 /* ViewController.swift */,
+				FE81B84B1D60D01500E1CA30 /* MomentThumbnail.swift */,
 				FE81B81D1D600B9B00E1CA30 /* Main.storyboard */,
 				FE81B8471D6014EC00E1CA30 /* MomentViewController.swift */,
 				FE81B8201D600B9B00E1CA30 /* Assets.xcassets */,
@@ -263,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE81B84C1D60D01500E1CA30 /* MomentThumbnail.swift in Sources */,
 				FE81B81C1D600B9B00E1CA30 /* ViewController.swift in Sources */,
 				FE81B81A1D600B9B00E1CA30 /* AppDelegate.swift in Sources */,
 				FE81B8481D6014EC00E1CA30 /* MomentViewController.swift in Sources */,
