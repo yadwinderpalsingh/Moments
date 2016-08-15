@@ -81,7 +81,7 @@
         <!--Moment-->
         <scene sceneID="eNb-2N-lWT">
             <objects>
-                <viewController id="tY6-cV-9WG" customClass="MomentViewController" customModule="Moments" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="momentStoryboard" id="tY6-cV-9WG" customClass="MomentViewController" customModule="Moments" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wtv-QG-Tq1"/>
                         <viewControllerLayoutGuide type="bottom" id="Fs1-ao-V8N"/>

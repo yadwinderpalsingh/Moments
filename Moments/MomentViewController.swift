@@ -11,8 +11,6 @@ import Photos
 
 class MomentViewController: UIViewController {
     
-    var assetCollection: PHAssetCollection!
-    var photosAsset: PHFetchResult!
     var index: Int = 0
     
     @IBAction func btnExport(sender: AnyObject) {
@@ -25,8 +23,8 @@ class MomentViewController: UIViewController {
             handler: {(alertAction)in
                 PHPhotoLibrary.sharedPhotoLibrary().performChanges({
                     //Delete Photo
-                    if let request = PHAssetCollectionChangeRequest(forAssetCollection: self.assetCollection){
-                        request.removeAssets([self.photosAsset[self.index]])                    }
+                    if let request = PHAssetCollectionChangeRequest(forAssetCollection: assetCollection){
+                        request.removeAssets([photosAsset[self.index]])                    }
                     },
                     completionHandler: {(success, error)in
                         alert.dismissViewControllerAnimated(true, completion: nil)
@@ -34,12 +32,12 @@ class MomentViewController: UIViewController {
                         if(success){
                             // Move to the main thread to execute
                             dispatch_async(dispatch_get_main_queue(), {
-                                self.photosAsset = PHAsset.fetchAssetsInAssetCollection(self.assetCollection, options: nil)
-                                if(self.photosAsset.count == 0){
+                                photosAsset = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: nil)
+                                if(photosAsset.count == 0){
                                     self.navigationController?.popToRootViewControllerAnimated(true)
                                 }else{
-                                    if(self.index >= self.photosAsset.count){
-                                        self.index = self.photosAsset.count - 1
+                                    if(self.index >= photosAsset.count){
+                                        self.index = photosAsset.count - 1
                                     }
                                     self.displayMoment()
                                 }
@@ -93,11 +91,11 @@ class MomentViewController: UIViewController {
     
     func displayMoment() {
         let imageManager = PHImageManager.defaultManager()
-        imageManager.requestImageForAsset(self.photosAsset[index] as! PHAsset, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFit , options: PHImageRequestOptions(), resultHandler: {(result:UIImage?, info: [NSObject: AnyObject]?) -> Void in
+        imageManager.requestImageForAsset(photosAsset[index] as! PHAsset, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFit , options: PHImageRequestOptions(), resultHandler: {(result:UIImage?, info: [NSObject: AnyObject]?) -> Void in
            
             UIView.transitionWithView(self.moment,
-                duration:0.5,
-                options: UIViewAnimationOptions.CurveEaseOut,
+                duration:0.8,
+                options: UIViewAnimationOptions.CurveEaseInOut,
                 animations: { self.moment.image = result },
                 completion: nil)
             }
@@ -115,7 +113,7 @@ class MomentViewController: UIViewController {
                 index -= 1
                 
                 if index < 0 {
-                    index = self.photosAsset.count - 1
+                    index = photosAsset.count - 1
                 }
                 
                 self.moment.image = nil
@@ -124,7 +122,7 @@ class MomentViewController: UIViewController {
             case UISwipeGestureRecognizerDirection.Left:
                 index += 1
                 
-                if index > self.photosAsset.count - 1 {
+                if index > photosAsset.count - 1 {
                     index = 0
                 }
                 

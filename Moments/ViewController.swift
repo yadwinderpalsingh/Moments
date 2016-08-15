@@ -11,12 +11,13 @@ import Photos
 
 let reuseIdentifier = "PhotoCell"
 let albumName = "My Moments"
+var albumFound: Bool = false
+var assetCollection: PHAssetCollection!
+var photosAsset: PHFetchResult!
+
 
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var albumFound: Bool = false
-    var assetCollection: PHAssetCollection!
-    var photosAsset: PHFetchResult!
     
     // Actions & Outlets
     
@@ -54,8 +55,6 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.hidesBarsOnTap = false
-        
         // Check if the folder exists, if not, create it
         
         let fetchOptions = PHFetchOptions()
@@ -65,8 +64,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         if collection.firstObject != nil {
             // folder exists
-            self.albumFound = true
-            self.assetCollection = collection.firstObject as! PHAssetCollection
+            albumFound = true
+            assetCollection = collection.firstObject as! PHAssetCollection
             self.getAssetCollection()
         }
         else{
@@ -81,23 +80,30 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                 completionHandler: {(success:Bool, error:NSError?)in
                     if(success){
                         print("Successfully created folder")
-                        self.albumFound = true
+                        albumFound = true
                         let collection = PHAssetCollection.fetchAssetCollectionsWithLocalIdentifiers([albumPlaceholder.localIdentifier], options: nil)
-                        self.assetCollection = collection.firstObject as! PHAssetCollection
+                        assetCollection = collection.firstObject as! PHAssetCollection
                     }
                     else{
                         print("Error creating folder")
-                        self.albumFound = false
+                        albumFound = false
                     }
             })
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        if assetCollection != nil {
+            getAssetCollection()
         }
     }
     
     // fetch the photos from collection
     
     func getAssetCollection() {
+        self.navigationController?.hidesBarsOnTap = false
         
-        self.photosAsset = PHAsset.fetchAssetsInAssetCollection(self.assetCollection, options: nil)
+        photosAsset = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: nil)
         
         self.momentCollection.reloadData()
     }
@@ -106,28 +112,14 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier! as String == "viewMomentThumbnail" {
-            if let controller:MomentViewController = segue.destinationViewController as? MomentViewController{
-                if let cell = sender as? UICollectionViewCell{
-                    if let indexPath: NSIndexPath = self.momentCollection.indexPathForCell(cell){
-                        controller.index = indexPath.item
-                        controller.photosAsset = self.photosAsset
-                        controller.assetCollection = self.assetCollection
-                    }
-                }
-            }
-        }
-    }
 
     
     // UICollectionViewDataSource Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         var count: Int = 0
-        if self.photosAsset != nil {
-            count = self.photosAsset.count
+        if photosAsset != nil {
+            count = photosAsset.count
         }
         return count
     }
@@ -136,7 +128,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         let cell: MomentThumbnail = momentCollection.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! MomentThumbnail
         
         // Modify the cell
-        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
+        let asset: PHAsset = photosAsset[indexPath.item] as! PHAsset
         PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFill , options: nil, resultHandler: {(result:UIImage?, info: [NSObject: AnyObject]?) -> Void in
             cell.setThumbnailMoment(result!)
         })
@@ -167,7 +159,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                 PHPhotoLibrary.sharedPhotoLibrary().performChanges({
                     let createAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
                     let assetPlaceholder = createAssetRequest.placeholderForCreatedAsset
-                    if let albumChangeRequest = PHAssetCollectionChangeRequest(forAssetCollection: self.assetCollection, assets: self.photosAsset) {
+                    if let albumChangeRequest = PHAssetCollectionChangeRequest(forAssetCollection: assetCollection, assets: photosAsset) {
                         albumChangeRequest.addAssets([assetPlaceholder!])
                     }
                     }, completionHandler: {(success, error)in
